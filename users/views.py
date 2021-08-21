@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from knox.models import AuthToken
+from knox.models import AuthToken, AuthTokenManager
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -27,8 +27,9 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        
+        auth_token = AuthToken.objects.create(user)
         return Response({
             "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1]
+            "token": auth_token[1],
+            'expiry': auth_token[0].expiry
         })
