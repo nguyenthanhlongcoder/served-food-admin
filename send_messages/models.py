@@ -1,3 +1,4 @@
+from datetime import datetime
 from colorfield.fields import ColorField
 from django.db import models
 
@@ -11,3 +12,4 @@ class SendMessage(models.Model):
     
     def __str__(self):
         return self.name
+    
