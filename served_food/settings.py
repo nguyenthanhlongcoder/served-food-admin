@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'orders',
     'rest_framework.authtoken',
     'knox',
-    'colorfield'
+    'colorfield',
+    'promotions',
+    'send_messages',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
