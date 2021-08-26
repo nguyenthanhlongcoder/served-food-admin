@@ -2,10 +2,12 @@ from django.shortcuts import render
 from rest_framework import generics
 from products import models
 from products import serializers
-
+from rest_framework.filters import SearchFilter, OrderingFilter
 class ProductList(generics.ListCreateAPIView):
     queryset = models.Product.objects.all()
     serializer_class = serializers.ProductSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ['category__name']
     
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Product.objects.all()
