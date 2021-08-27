@@ -8,7 +8,6 @@ class PromotionList(generics.ListCreateAPIView):
     queryset = models.Promotion.objects.all()
     serializer_class = serializers.PromotionSerializer
     filter_backends = (SearchFilter, OrderingFilter)
-    filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['status__id']
 
 class PromotionDetail(generics.RetrieveUpdateDestroyAPIView):

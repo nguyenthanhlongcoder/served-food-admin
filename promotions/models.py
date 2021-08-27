@@ -13,7 +13,7 @@ class Promotion(models.Model):
     name = models.CharField(max_length=100, null=True)
     description = models.TextField(null=True)
     image = models.ImageField(null=True)
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1, related_name='status', null=True)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='status')
     start_at = models.DateField()
     end_at = models.DateField()
     

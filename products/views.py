@@ -7,7 +7,7 @@ class ProductList(generics.ListCreateAPIView):
     queryset = models.Product.objects.all()
     serializer_class = serializers.ProductSerializer
     filter_backends = (SearchFilter, OrderingFilter)
-    search_fields = ['category__name']
+    search_fields = ['category__id']
     
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Product.objects.all()
