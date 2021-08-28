@@ -1,11 +1,9 @@
-from datetime import datetime
 from colorfield.fields import ColorField
 from django.db import models
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 import FCMManager as fcm
 from fcm_devices.models import FCMDevice
-import fcm_devices
 class SendMessage(models.Model):
     name = models.CharField(max_length=100, null=True)
 
