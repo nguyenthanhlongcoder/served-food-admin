@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 from pathlib import Path
 import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 from datetime import timedelta
@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'colorfield',
     'promotions',
     'send_messages',
+    'fcm_devices'
+
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -76,6 +78,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+FCM_DJANGO_SETTINGS = {
+    "FCM_SERVER_KEY": "AAAAkSaJ_1M:APA91bGh-4bZclakIqdiInRQAet3llILVqQZa8M9O4FSxNghPc8u1cMD4y1NRzb4Xvf9GPwxfW4a8N9r1AGMbipKUp8awsS-m84KYwfA0E-d1CorRaXrxc09C9hN0bwr7Kjz1nGrVZgU"
+}
 ROOT_URLCONF = 'served_food.urls'
 
 TEMPLATES = [
@@ -141,6 +146,8 @@ USE_L10N = False
 USE_TZ = False
 
 
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -151,3 +158,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# To learn more, visit the docs here:
+# https://cloud.google.com/docs/authentication/getting-started>
+

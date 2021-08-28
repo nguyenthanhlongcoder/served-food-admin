@@ -27,7 +27,8 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     path('tables/', include('tables.urls')),
     path('promotions/', include('promotions.urls')),
-    path('send_messages/', include('send_messages.urls'))
+    path('send_messages/', include('send_messages.urls')),
+    path('fcm_devices/', include('fcm_devices.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

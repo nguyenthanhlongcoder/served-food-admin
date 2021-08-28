@@ -11,4 +11,4 @@ class TableSerializer(serializers.ModelSerializer):
     status = StatusSerializer(many=False, read_only=False)
     class Meta:
         model = models.Table
-        fields=['id','name','description','status','created_at','updated_at']
+        fields=['id','name','order','description','status','created_at','updated_at']
