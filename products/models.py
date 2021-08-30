@@ -7,7 +7,7 @@ from django.dispatch.dispatcher import receiver
 import FCMManager as fcm
 
 class Category(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
     description = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -17,7 +17,7 @@ class Category(models.Model):
 
     
 class Variation(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
     description = models.TextField(null=True)
     price_affected = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,10 +36,8 @@ class VariationOption(models.Model):
     def __str__(self):
         return self.name
 
-
-
 class Label(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
     description = models.TextField(null=True)
     background_color = ColorField(default='#FF0000')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -48,7 +46,7 @@ class Label(models.Model):
         return self.name
     
 class Product(models.Model):
-    name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100, null=True,unique=True)
     is_active = models.BooleanField(default=True)
     description = models.TextField(null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='category')

@@ -5,9 +5,8 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 import FCMManager as fcm
 class Table(models.Model):
-    name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100, null=True,unique=True)
     description = models.TextField(null=True)
-    order = models.IntegerField(null=True,blank=True)
     is_active = models.BooleanField(default=True)
     status = models.CharField(max_length=100, choices=[('ready','Ready'),('in_user','In User'), ('ordered','Ordered')], default='ready')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -15,5 +14,3 @@ class Table(models.Model):
     
     def __str__(self):
         return self.name
-
-   

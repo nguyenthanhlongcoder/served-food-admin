@@ -7,7 +7,7 @@ class OrderItemInline(admin.TabularInline):
     model = models.OrderItem
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['table', 'user', 'status', 'order_total_price']
+    list_display = ['table', 'paid_by', 'status','order_total_price']
     search_fields = ['table']
     inlines = [OrderItemInline]
     

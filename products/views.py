@@ -1,13 +1,20 @@
+from django.db.models import fields
 from django.shortcuts import render
+from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import generics
 from products import models
 from products import serializers
 from rest_framework.filters import SearchFilter, OrderingFilter
+import django_filters
+
+
+        
 class ProductList(generics.ListCreateAPIView):
     queryset = models.Product.objects.all()
     serializer_class = serializers.ProductSerializer
-    filter_backends = (SearchFilter, OrderingFilter)
-    search_fields = ['category__id']
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['is_active','category','label']
+
     
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Product.objects.all()
