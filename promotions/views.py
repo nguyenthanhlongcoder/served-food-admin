@@ -9,7 +9,7 @@ class PromotionList(generics.ListCreateAPIView):
     queryset = models.Promotion.objects.all()
     serializer_class = serializers.PromotionSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_fields = ['is_active','status']
+    filter_fields = ['is_active']
 
 class PromotionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Promotion.objects.all()
