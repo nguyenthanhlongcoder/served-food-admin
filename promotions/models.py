@@ -38,15 +38,17 @@ class Promotion(models.Model):
 
 @receiver(pre_save, sender=Promotion)
 def on_change(sender, instance, **kwargs):
+    fcm_devices = FCMDevice.objects.all()
+    tokens = []
+    for item in fcm_devices:
+        if item.is_active:
+            tokens.append(item.registration_token)
     if instance.id is None:
-        pass
+        if instance.status == 'in_progess': 
+            fcm.sendPush("Quản lý", '"' + instance.name +'" đã áp dụng' , tokens) 
     else:
         try:
-            fcm_devices = FCMDevice.objects.all()
-            tokens = []
-            for item in fcm_devices:
-                if item.is_active:
-                    tokens.append(item.registration_token)
+            
             previous = Promotion.objects.get(id = instance.id)
             if (previous.status != instance.status and instance.is_active == True):
                 if instance.status == 'in_progess': 
