@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'users',
     'tables',
     'orders',
-    'rest_framework.authtoken',
     'knox',
     'colorfield',
     'promotions',
