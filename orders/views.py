@@ -18,7 +18,7 @@ class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
 class OrderItemList(generics.ListCreateAPIView):
     queryset = models.OrderItem.objects.all()
     serializer_class = serializers.OrderItemSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filter_fields = ['order']
     
 class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):

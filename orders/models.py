@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from products.models import Product, ProductVariationOption
 import FCMManager as fcm
 import logging
+
 logger = logging.getLogger(__name__)
 
 class Order(models.Model):
