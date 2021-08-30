@@ -5,10 +5,12 @@ from django.dispatch import receiver
 import FCMManager as fcm
 from fcm_devices.models import FCMDevice
 class SendMessage(models.Model):
-    name = models.CharField(max_length=100, null=True)
+    name = models.TextField(null=True)
 
     text_color = ColorField(default='#FF0000')
     border_color = ColorField(default='#FF0000')
+    is_active = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     
@@ -62,8 +64,6 @@ def on_delete(sender, instance, **kwargs):
                 if item.is_active:
                     tokens.append(item.registration_token)
             fcm.sendPush("Quản lý", 'Xóa thông báo "' +  instance.name + '"', tokens) 
-
-
         except:
             pass
 

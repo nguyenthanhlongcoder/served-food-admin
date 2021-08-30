@@ -3,10 +3,6 @@ from django.contrib import admin
 from django.contrib import admin
 from orders import models
 
-class StatusAdmin(admin.ModelAdmin):
-    list_display = ['name','description']
-    search_fields = ['name']
-
 class OrderItemInline(admin.TabularInline):
     model = models.OrderItem
 
@@ -15,7 +11,6 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ['table']
     inlines = [OrderItemInline]
     
-admin.site.register(models.Status, StatusAdmin)
 admin.site.register(models.Order, OrderAdmin)
 
 

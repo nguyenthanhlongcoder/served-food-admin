@@ -30,10 +30,7 @@ class VariationAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     search_fields = ['name']
-    
-class StatusAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description']
-    search_fields = ['name']
+
     
 class LabelAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
@@ -43,5 +40,4 @@ class LabelAdmin(admin.ModelAdmin):
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.Variation, VariationAdmin)
 admin.site.register(models.Category, CategoryAdmin)
-admin.site.register(models.Status, StatusAdmin)
 admin.site.register(models.Label, LabelAdmin)

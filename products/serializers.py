@@ -7,10 +7,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = models.Category
         fields='__all__'
         
-class StatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Status
-        fields='__all__'
+
         
 class VariationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,7 +36,6 @@ class ProductSerializer(serializers.ModelSerializer):
     label = LabelSerializer(many=True, read_only=True)
     variation = VariationSerializer(many=True, read_only=True)
     category = CategorySerializer(many=False, read_only=True)
-    status = StatusSerializer(many=False, read_only=True)
     class Meta:
         model = models.Product
         fields=['id', 'name', 'description','category','status', 'label', 'variation','image', 'product_variation_option', 'created_at','updated_at']

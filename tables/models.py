@@ -1,21 +1,19 @@
+from fcm_devices.models import FCMDevice
 from django.db import models
 from django.db.models.fields.related import ForeignKey
-class Status(models.Model):
-    name = models.CharField(max_length=100, null=True)
-    description = models.TextField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return self.name
-    
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
+import FCMManager as fcm
 class Table(models.Model):
     name = models.CharField(max_length=100, null=True)
     description = models.TextField(null=True)
     order = models.IntegerField(null=True,blank=True)
-    status = ForeignKey(Status, on_delete=models.CASCADE, default=1, related_name='status', null=True)
+    is_active = models.BooleanField(default=True)
+    status = models.CharField(max_length=100, choices=[('ready','Ready'),('in_user','In User'), ('ordered','Ordered')], default='ready')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.name
+
+   

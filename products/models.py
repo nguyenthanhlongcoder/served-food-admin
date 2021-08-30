@@ -1,5 +1,10 @@
+from fcm_devices.models import FCMDevice
 from django.db import models
 from colorfield.fields import ColorField
+from django.db.models.fields import BooleanField
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
+import FCMManager as fcm
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -9,13 +14,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Status(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return self.name
+
     
 class Variation(models.Model):
     name = models.CharField(max_length=100)
@@ -36,12 +35,13 @@ class VariationOption(models.Model):
     
     def __str__(self):
         return self.name
-    
+
+
+
 class Label(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
-    light_theme_color = ColorField(default='#FF0000')
-    dark_theme_color = ColorField(default='#FF0000')
+    background_color = ColorField(default='#FF0000')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -49,10 +49,10 @@ class Label(models.Model):
     
 class Product(models.Model):
     name = models.CharField(max_length=100, null=True)
+    is_active = models.BooleanField(default=True)
     description = models.TextField(null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='category')
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='status')
-    label = models.ManyToManyField(Label, related_name='label')
+    label = models.ManyToManyField(Label, related_name='label', null=True, blank=True)
     variation = models.ManyToManyField(Variation, related_name='variation')
     image = models.ImageField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
