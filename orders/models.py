@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class Order(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='table')
     paid_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', blank=True,null=True)
-    status = models.CharField(max_length=100, choices=[('serving','Serving'),('paid','Paid'), ('cancelled','Cancelled')])
+    status = models.CharField(max_length=100, choices=[('serving','Serving'),('paid','Paid'), ('cancelled','Cancelled')],default='serving')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -40,6 +40,7 @@ def on_change(sender, instance, **kwargs):
             fcm_devices = FCMDevice.objects.all()
             tokens = []
             previous = Order.objects.get(id = instance.id)
+           
             for item in fcm_devices:
                 if item.is_active:
                     tokens.append(item.registration_token)
@@ -52,6 +53,7 @@ def on_change(sender, instance, **kwargs):
 
         except NameError:
             pass
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_item')
@@ -75,11 +77,14 @@ class OrderItem(models.Model):
 
 @receiver(post_save, sender=OrderItem)
 def on_save(sender, instance, **kwargs):
+    order_item = OrderItem.objects.get(id = instance.id)
+    order = Order.objects.get(id = order_item.order.id)
+    table = Table.objects.get(id = order.table.id)
+    table.status = 'ordered'
+    table.save()
     try:
         fcm_devices = FCMDevice.objects.all()
         tokens = []
-        order_item = OrderItem.objects.get(id = instance.id)
-        order = Order.objects.get(id = order_item.order.id)
         if order is not None:
             for item in fcm_devices:
                 if item.is_active:
@@ -97,6 +102,12 @@ def on_delete(sender, instance, **kwargs):
             fcm_devices = FCMDevice.objects.all()
             tokens = []
             order = Order.objects.get(id = instance.order.id)
+            order_items = OrderItem.objects.filter(order = order)
+            print(len(order_items))
+            if (len(order_items) == 0):
+                table = Table.objects.get(id = order.table.id)
+                table.status = 'ready'
+                table.save()
             for item in fcm_devices:
                 if item.is_active:
                     tokens.append(item.registration_token)
