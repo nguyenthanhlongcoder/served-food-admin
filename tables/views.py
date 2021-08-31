@@ -8,7 +8,7 @@ class TableList(generics.ListCreateAPIView):
     queryset = models.Table.objects.all()
     serializer_class = serializers.TableSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_fields = ['is_active']  
+    filter_fields = ['is_active']
     
 class TableDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Table.objects.all()

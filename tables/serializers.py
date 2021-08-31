@@ -7,4 +7,4 @@ class TableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Table
-        fields=('id','name','description','is_active','status')
+        fields='__all__'
