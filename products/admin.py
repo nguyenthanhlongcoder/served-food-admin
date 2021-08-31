@@ -12,7 +12,7 @@ class ProductAdmin(admin.ModelAdmin):
         return format_html('<img src="{}" width="70" height="50"/>'.format(obj.image.url))
     
     image_tag.short_description = 'Image'
-    list_display = ['name','description','category','image_tag']
+    list_display = ['name','description','is_active','category','label','image_tag']
     inlines = [ProductVariationOptionInline]
     search_fields = ['name']
 
