@@ -8,10 +8,8 @@ class FCMDeviceList(generics.ListCreateAPIView):
     queryset = models.FCMDevice.objects.all()
     serializer_class = serializers.FCMDeviceSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_fields = ['is_active','user']
+    filter_fields = ['is_active','user','device_id']
 
 class FCMDeviceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.FCMDevice.objects.all()
     serializer_class = serializers.FCMDeviceSerializer
-    filter_backends = [DjangoFilterBackend]
-    filter_fields = ['is_active','user']
