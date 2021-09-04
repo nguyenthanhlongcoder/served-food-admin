@@ -5,8 +5,10 @@ from . import views
 urlpatterns = [
     path('', views.ProductList.as_view()),
     path('<int:pk>', views.ProductDetail.as_view()),
-    path('variation', views.VariationList.as_view()),
-    path('variation/<int:pk>', views.VariationDetail.as_view()),
-    path('label', views.LabelList.as_view()),
-    path('label/<int:pk>', views.LabelDetail.as_view()),
+    path('variations', views.VariationList.as_view()),
+    path('variations/<int:pk>', views.VariationDetail.as_view()),
+    path('labels', views.LabelList.as_view()),
+    path('labels/<int:pk>', views.LabelDetail.as_view()),
+    path('product_variation_options', views.ProductVariationOptionList.as_view()),
+    path('product_variation_options/<int:pk>', views.ProductVariationOptionList.as_view()),
 ]
