@@ -7,7 +7,10 @@ from products import serializers
 from rest_framework.filters import SearchFilter, OrderingFilter
 import django_filters
 
-
+class CategoryList(generics.ListCreateAPIView):
+    queryset = models.Category.objects.all()
+    serializer_class = serializers.CategorySerializer
+    
         
 class ProductList(generics.ListCreateAPIView):
     queryset = models.Product.objects.all()
