@@ -6,12 +6,9 @@ from users.serializers import UserSerializer
 from products.serializers import ProductVariationOptionSerializer, ProductSerializer
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product_variation_option = ProductVariationOptionSerializer(many=False, read_only=True)
-    user = UserSerializer(many=False, read_only=True)
-    product = ProductSerializer(many=False, read_only=True)
     class Meta:
         model = models.OrderItem
-        fields = ['id','order','user','product','product_variation_option','quantity','note','order_item_price','created_at', 'updated_at']
+        fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
     # table = TableSerializer(many=False)
