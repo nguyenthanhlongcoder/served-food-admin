@@ -7,7 +7,7 @@ from products.serializers import ProductVariationOptionSerializer, ProductSerial
 
 class OrderItemSerializer(serializers.ModelSerializer):
     product_variation_option = ProductVariationOptionSerializer(many=False)
-    user = UserSerializer(many=False)
+    # user = UserSerializer(many=False)
     product = ProductSerializer(many=False)
     class Meta:
         model = models.OrderItem
