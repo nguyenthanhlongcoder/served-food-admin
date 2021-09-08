@@ -11,9 +11,14 @@ class OrdertList(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend]
     filter_fields = ['table','status']
     
+class OrderCreateList(generics.ListCreateAPIView):
+    queryset = models.Order.objects.all()
+    serializer_class = serializers.OrderCreateSerializer
+    
 class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Order.objects.all()
     serializer_class = serializers.OrderSerializer
+
 
 class OrderItemList(generics.ListCreateAPIView):
     queryset = models.OrderItem.objects.all()
@@ -21,6 +26,10 @@ class OrderItemList(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filter_fields = ['order']
     
+class OrderItemCreateList(generics.ListCreateAPIView):
+    queryset = models.OrderItem.objects.all()
+    serializer_class = serializers.OrderItemCreateSerializer
+
 class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.OrderItem.objects.all()
     serializer_class = serializers.OrderItemSerializer

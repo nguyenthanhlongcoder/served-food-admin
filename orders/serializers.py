@@ -20,5 +20,14 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Order
         fields = ['id','table','status','order_item' ,'order_total_price','created_at', 'updated_at']
- 
         
+class OrderItemCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.OrderItem
+        fields = ['id','order','user','product','product_variation_option','quantity','note','order_item_price','created_at', 'updated_at']
+
+class OrderCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Order
+        fields = ['id','table','status','order_item' ,'order_total_price','created_at', 'updated_at']
