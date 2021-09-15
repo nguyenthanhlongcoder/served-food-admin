@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'fcm_devices',
     'django_filters',
     'phonenumber_field',
-    'pages'
+
 
  
 ]
