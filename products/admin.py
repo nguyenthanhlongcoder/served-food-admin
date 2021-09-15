@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from products import models
 from django.utils.html import format_html
-import json
+
 
 class ProductVariationOptionInline(admin.TabularInline):
     model = models.ProductVariationOption
@@ -35,9 +35,22 @@ class CategoryAdmin(admin.ModelAdmin):
 class LabelAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     search_fields = ['name']
+
+class ExtraVariationOptionInline(admin.TabularInline):
+    model = models.ExtraVariationOption
     
+
+class ExtraAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description']
+    search_fields = ['name']
+    inlines=[ExtraVariationOptionInline]
+
 
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.Variation, VariationAdmin)
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Label, LabelAdmin)
+admin.site.register(models.Extra, ExtraAdmin)
+
+
+

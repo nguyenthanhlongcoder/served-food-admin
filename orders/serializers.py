@@ -11,15 +11,15 @@ class OrderItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer(many=False)
     class Meta:
         model = models.OrderItem
-        fields = ['id','order','user','product','product_variation_option','quantity','note','order_item_price','created_at', 'updated_at']
+        fields = ['id','order','user','product','product_variation_option','quantity','note','order_item_price','order_item_price_record','is_active','created_at', 'updated_at']
 
 class OrderSerializer(serializers.ModelSerializer):
     # table = TableSerializer(many=False)
     # user = UserSerializer(many=False)
-    order_item = OrderItemSerializer(many=True)
+    order_items = OrderItemSerializer(many=True)
     class Meta:
         model = models.Order
-        fields = ['id','table','status','order_item' ,'order_total_price','created_at', 'updated_at']
+        fields = ['id','table','status','order_items' ,'order_total_price','order_total_price_record','created_at', 'updated_at']
         
 class OrderItemCreateSerializer(serializers.ModelSerializer):
     class Meta:

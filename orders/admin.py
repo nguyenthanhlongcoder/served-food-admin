@@ -1,16 +1,14 @@
 from django.contrib import admin
+from orders.models import Order,OrderItem
 
-from django.contrib import admin
-from orders import models
 
 class OrderItemInline(admin.TabularInline):
-    model = models.OrderItem
+    model = OrderItem
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['table', 'paid_by', 'status','order_total_price']
+    list_display = ['table', 'paid_by', 'status','order_total_price_record']
     search_fields = ['table']
     inlines = [OrderItemInline]
     
-admin.site.register(models.Order, OrderAdmin)
-
+admin.site.register(Order, OrderAdmin)
 

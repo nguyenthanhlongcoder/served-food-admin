@@ -14,6 +14,8 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
+
 from datetime import timedelta
 from rest_framework.settings import api_settings
 
@@ -32,45 +34,48 @@ ALLOWED_HOSTS = ['served-food.herokuapp.com','127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+  
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'products',
     'rest_framework',
     'users',
     'tables',
     'orders',
-    'knox',
     'colorfield',
     'promotions',
     'send_messages',
     'fcm_devices',
     'django_filters',
+    'phonenumber_field',
+    'pages'
 
+ 
 ]
+
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/"
+
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-        'knox.auth.TokenAuthentication',
-
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
     ],
     
 
 }
-REST_KNOX = {
-  'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
-  'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-  'TOKEN_TTL': timedelta(hours=8),
-  'USER_SERIALIZER': 'knox.serializers.UserSerializer',
-  'TOKEN_LIMIT_PER_USER': None,
-  'AUTO_REFRESH': False,
-  'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
-}
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# AUTHENTICATION_BACKENDS = [
+#                            'users.settings.SettingsBackend']
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -90,7 +95,7 @@ ROOT_URLCONF = 'served_food.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(SETTINGS_PATH, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,12 +1,19 @@
 from django.shortcuts import render
-from knox.models import AuthToken, AuthTokenManager
 from rest_framework import generics
-from django.contrib.auth.models import User
+from users.models import CustomUser
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from users import serializers
-from datetime import timedelta
-from django.utils import timezone
-from django.conf import settings
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+User = get_user_model()
+
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
@@ -15,21 +22,19 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
     
-class LoginAPI(generics.GenericAPIView):
+class LoginAPI(APIView):
     serializer_class = serializers.LoginUserSerializer
-
-    def expires_in(token):
-        time_elapsed = timezone.now() - token.created
-        left_time = timedelta(seconds = settings.TOKEN_EXPIRED_AFTER_SECONDS) - time_elapsed
-        return left_time
-
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        auth_token = AuthToken.objects.create(user)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
         return Response({
-            "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": auth_token[1],
-            'expiry': auth_token[0].expiry
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
         })
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
