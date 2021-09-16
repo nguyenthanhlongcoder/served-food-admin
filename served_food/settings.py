@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-6ig(chb%2z!#jnrbxfk4!9p)fas39pn-)tss(hb5dvb91(i^vu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['served-food.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['served-food.herokuapp.com','127.0.0.1', 'www.servedfood.xyz','servedfood.xyz']
 
 
 # Application definition
@@ -53,9 +53,6 @@ INSTALLED_APPS = [
     'fcm_devices',
     'django_filters',
     'phonenumber_field',
-
-
- 
 ]
 
 LOGIN_URL = "/login"
@@ -71,7 +68,7 @@ REST_FRAMEWORK = {
     
 
 }
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'users.StaffUser'
 
 # AUTHENTICATION_BACKENDS = [
 #                            'users.settings.SettingsBackend']
@@ -117,7 +114,7 @@ WSGI_APPLICATION = 'served_food.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / "db.sqlite3"),
     }
 }
 
@@ -172,10 +169,10 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = str(BASE_DIR / 'static')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -183,4 +180,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # To learn more, visit the docs here:
 # https://cloud.google.com/docs/authentication/getting-started>
-

@@ -1,4 +1,3 @@
-from fcm_devices.models import FCMDevice
 from django.db import models
 
 import FCMManager as fcm

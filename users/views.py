@@ -1,14 +1,10 @@
-from django.shortcuts import render
 from rest_framework import generics
-from users.models import CustomUser
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from users import serializers
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+
 from rest_framework.views import APIView
 from .serializers import MyTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView

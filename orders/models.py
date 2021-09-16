@@ -1,7 +1,6 @@
 from django.core.checks.messages import Error
 from fcm_devices.models import FCMDevice
 from django.db import models
-from django.db.models.fields import IntegerField, PositiveBigIntegerField, PositiveIntegerField
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from tables.models import Table
@@ -19,8 +18,8 @@ class Order(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='table')
     paid_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', blank=True,null=True)
     status = models.CharField(max_length=100, choices=[('serving','Serving'),('paid','Paid'), ('cancelled','Cancelled')],default='serving')
-    order_total_price = models.PositiveBigIntegerField(default=0)
-    order_total_price_record = models.PositiveBigIntegerField(default=0)
+    order_total_price = models.PositiveIntegerField(default=0)
+    order_total_price_record = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
@@ -73,8 +72,8 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     note = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    order_item_price = models.PositiveBigIntegerField(default=0)
-    order_item_price_record = models.PositiveBigIntegerField(default=0)
+    order_item_price = models.PositiveIntegerField(default=0)
+    order_item_price_record = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     
