@@ -1,6 +1,5 @@
 from django.db import models
 
-import FCMManager as fcm
 class Table(models.Model):
     name = models.CharField(max_length=100, null=True,unique=True)
     description = models.TextField(null=True)
