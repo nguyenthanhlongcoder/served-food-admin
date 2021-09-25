@@ -69,19 +69,10 @@ class Extra(models.Model):
     name =  models.CharField(max_length=100, null=True,unique=True)
     is_active = models.BooleanField(default=True)
     description = models.TextField(null=True)
-    variation = models.ManyToManyField(Variation, related_name='variation')
+    price = models.PositiveIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.name
     
-class ExtraVariationOption(models.Model):
-    extra = models.ForeignKey(Extra, on_delete=models.CASCADE, related_name='extra_variation_option')
-    variation_option = models.ManyToManyField(VariationOption, related_name='variation_option')
-    price = models.PositiveIntegerField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-        
-    def __str__(self):
-        return self.extra.name + ' ' + self.variation_option.name

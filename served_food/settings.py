@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
+from django.conf import settings
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
@@ -64,14 +67,16 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication'
+
     ],
-    
+ 
+
 
 }
 AUTH_USER_MODEL = 'users.StaffUser'
 
-# AUTHENTICATION_BACKENDS = [
-#                            'users.settings.SettingsBackend']
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

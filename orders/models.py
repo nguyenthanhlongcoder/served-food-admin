@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from tables.models import Table
-from products.models import Product, ProductVariationOption
+from products.models import Extra, Product, ProductVariationOption, VariationOption
 import FCMManager as fcm
 import logging
 from django.contrib.auth import get_user_model
@@ -52,13 +52,37 @@ def on_change(sender, instance, **kwargs):
                 elif item.is_active:
                     tokens.append(item.registration_token)
             if previous is not None:
+                if previous.table != instance.table:
+                    previous_table = Table.objects.get(id = previous.table.id)
+                    previous_table.status = 'ready'
+                    previous_table.save()
+                    instance_table = Table.objects.get(id = instance.table.id)
+                    instance_table.status = 'ordered'
+                    instance_table.save()
+
+                    # fcm.sendPush(str(instance.paid_by.first_name + ' ' + instance.paid_by.last_name),'Đã chuyển bàn "'+ str(previous.table) + '" thành "'+ str(instance.table) +'"' , tokens)
+
                 if previous.status != instance.status:
                     instance.order_total_price_record = instance.order_total_price
-                    if instance.status =='paid':
+                    order_items = OrderItem.objects.filter(order = instance)
+                    table = Table.objects.get(id = instance.table.id)
+                    table.status = 'ready'
+                    table.save()
+
+                    for order_item in order_items:
+                        extras_total_price = 0
+                        if order_item.extras.count() != 0:
+                            for extra in order_item.extras.all():
+                                extras_total_price += extra.price
+                        order_item.order_extra_total_price_record = extras_total_price * order_item.quantity
+                        order_item.order_product_total_price_record = order_item.product_variation_option.price* order_item.quantity
+                        order_item.order_item_price_record = order_item.order_item_price
+                        order_item.save()
+                    # if instance.status =='paid':
                        
-                        fcm.sendPush(str(instance.paid_by.first_name + ' ' + instance.paid_by.last_name),'Đã thanh toán bàn "'+ str(previous.table) + '"' , tokens)
-                    elif instance.status == 'cancelled':                      
-                        fcm.sendPush('Quản lý','Đã hủy bàn "'+ str(previous.table) + '"' , tokens)
+                    #     fcm.sendPush(str(instance.paid_by.first_name + ' ' + instance.paid_by.last_name),'Đã thanh toán bàn "'+ str(previous.table) + '"' , tokens)
+                    # elif instance.status == 'cancelled':                      
+                    #     fcm.sendPush('Quản lý','Đã hủy bàn "'+ str(previous.table) + '"' , tokens)
 
         except NameError:
             pass
@@ -68,18 +92,26 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name='product')
     product_variation_option = models.ForeignKey(ProductVariationOption, on_delete=models.CASCADE, related_name='product_variation_option')
+    order_item_variation_options = models.ManyToManyField(VariationOption, related_name='order_item_variation_options')
+    extras = models.ManyToManyField(Extra, related_name='extras',null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     note = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     order_item_price = models.PositiveIntegerField(default=0)
+    order_product_total_price_record = models.PositiveIntegerField(default=0)
+    order_extra_total_price_record = models.PositiveIntegerField(default=0)
     order_item_price_record = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     
     def _get_order_item_price(self):
         if self.is_active is True:
-            return self.product_variation_option.price * self.quantity
+            extras_total_price = 0
+            if self.extras.count() != 0:
+                for extra in self.extras.all():
+                    extras_total_price += extra.price
+            return (self.product_variation_option.price + extras_total_price) * self.quantity
         else:
             return 0
     
@@ -92,12 +124,14 @@ class OrderItem(models.Model):
 @receiver(pre_save, sender=OrderItem)
 def on_change(sender, instance, **kwargs):
     order = Order.objects.get(id = instance.order.id)
-    table = Table.objects.get(id = order.table.id)
-    table.status = 'ordered'
-    table.save()
+   
     fcm_devices = FCMDevice.objects.all()
     tokens = []
     if order is not None:
+        if order.status == 'serving':
+            table = Table.objects.get(id = order.table.id)
+            table.status = 'ordered'
+            table.save()
         for item in fcm_devices:
             if item.is_active:
                 tokens.append(item.registration_token)
@@ -111,7 +145,14 @@ def on_change(sender, instance, **kwargs):
         if previous is not None:
             try:
                 if not instance.is_active:
-                    logger.error(instance.order_item_price)
+                    extras_total_price = 0
+                    if instance.extras.count() != 0:
+                        for extra in instance.extras.all():
+                            extras_total_price += extra.price
+                    
+                    
+                    instance.order_product_total_price_record = extras_total_price * instance.quantity
+                    instance.order_product_total_price_record = instance.product_variation_option.price* instance.quantity
                     instance.order_item_price_record = previous.order_item_price
                     fcm.sendPush("Quản lý", 'Hủy món "' +  str(previous.product_variation_option) + '" cho bàn "' + str(order.table) + '"', tokens) 
 
@@ -119,26 +160,26 @@ def on_change(sender, instance, **kwargs):
                 logger.error(NameError)
        
 
-@receiver(post_delete, sender=OrderItem)
-def on_delete(sender, instance, **kwargs):
-    if instance.id is None:
-        pass
-    else:
-        try:
-            fcm_devices = FCMDevice.objects.all()
-            tokens = []
-            order = Order.objects.get(id = instance.order.id)
-            order_items = OrderItem.objects.filter(order = order)
+# @receiver(post_delete, sender=OrderItem)
+# def on_delete(sender, instance, **kwargs):
+#     if instance.id is None:
+#         pass
+#     else:
+#         try:
+#             fcm_devices = FCMDevice.objects.all()
+#             tokens = []
+#             order = Order.objects.get(id = instance.order.id)
+#             order_items = OrderItem.objects.filter(order = order)
 
-            if (len(order_items) == 0):
-                table = Table.objects.get(id = order.table.id)
-                table.status = 'ready'
-                table.save()
-            for item in fcm_devices:
-                if item.is_active:
-                    tokens.append(item.registration_token)
-            fcm.sendPush("Quản lý", 'Hủy món "' +  str(instance.product_variation_option) + '" cho bàn "' + str(order.table) + '"', tokens) 
-        except NameError:
-            logger.error(NameError)
+#             if (len(order_items) == 0):
+#                 table = Table.objects.get(id = order.table.id)
+#                 table.status = 'ready'
+#                 table.save()
+#             for item in fcm_devices:
+#                 if item.is_active:
+#                     tokens.append(item.registration_token)
+#             fcm.sendPush("Quản lý", 'Hủy món "' +  str(instance.product_variation_option) + '" cho bàn "' + str(order.table) + '"', tokens) 
+#         except NameError:
+#             logger.error(NameError)
 
 

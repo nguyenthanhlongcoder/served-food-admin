@@ -36,14 +36,12 @@ class LabelAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     search_fields = ['name']
 
-class ExtraVariationOptionInline(admin.TabularInline):
-    model = models.ExtraVariationOption
+
     
 
 class ExtraAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     search_fields = ['name']
-    inlines=[ExtraVariationOptionInline]
 
 
 admin.site.register(models.Product, ProductAdmin)

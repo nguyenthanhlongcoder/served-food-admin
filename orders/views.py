@@ -18,7 +18,9 @@ class OrderCreateList(generics.ListCreateAPIView):
 class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Order.objects.all()
     serializer_class = serializers.OrderSerializer
-
+class OrderCreateDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Order.objects.all()
+    serializer_class = serializers.OrderCreateSerializer
 
 class OrderItemList(generics.ListCreateAPIView):
     queryset = models.OrderItem.objects.all()
@@ -33,3 +35,6 @@ class OrderItemCreateList(generics.ListCreateAPIView):
 class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.OrderItem.objects.all()
     serializer_class = serializers.OrderItemSerializer
+class OrderItemCreateDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.OrderItem.objects.all()
+    serializer_class = serializers.OrderItemCreateSerializer

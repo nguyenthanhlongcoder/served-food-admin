@@ -11,6 +11,7 @@ class Promotion(models.Model):
         READY = 'ready', _('Ready')
         IN_PROGESS = 'in_progess', _('In Progess'),
         STOPPED = 'stopped', _('Stopped')
+   
     name = models.CharField(max_length=100, null=True,unique=True)
     is_active = models.BooleanField(default=True)
     description = models.TextField(null=True)

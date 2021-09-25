@@ -18,7 +18,16 @@ class ProductList(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend]
     filter_fields = ['is_active','id', 'category','labels']
 
-    
+class ExtraList(generics.ListCreateAPIView):
+    queryset = models.Extra.objects.all()
+    serializer_class = serializers.ExtraSerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['is_active','id']
+
+class ExtraDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Extra.objects.all()
+    serializer_class = serializers.ExtraSerializer
+
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Product.objects.all()
     serializer_class = serializers.ProductSerializer

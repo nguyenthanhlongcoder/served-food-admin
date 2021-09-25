@@ -44,8 +44,10 @@ class ProductSerializer(serializers.ModelSerializer):
         model = models.Product
         fields=['id', 'name', 'description','category', 'labels', 'variations','image', 'product_variation_options', 'created_at','updated_at']
 
+    
+class ExtraSerializer(serializers.ModelSerializer):
 
-
-  
-
+    class Meta:
+        model = models.Extra
+        fields=['id', 'name', 'description', 'price', 'created_at','updated_at']
 
